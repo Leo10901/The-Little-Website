@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BloorARTS — The Little Mermaid Musical 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue: #0033A0;
+  --blue-dark: #00237a;
+  --white: #ffffff;
+  --off-white: #f8f9fc;
+  --border: #d0d8e8;
+  --text: #0a1a3a;
+  --text-soft: #4a5878;
+  --text-faint: #8e9db0;
+}
+
+html, body { 
+  scroll-behavior: smooth; 
+  overscroll-behavior-y: none; 
+  background: var(--white);
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* RIPPLE EFFECT */
+.ripple-container {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  pointer-events: none;
+}
+.ripple-node {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  backdrop-filter: url(#liquid-trail) blur(1px);
+  -webkit-backdrop-filter: url(#liquid-trail) blur(1px);
+  box-shadow: inset 0 0 30px rgba(255,255,255,0.05), 0 0 15px rgba(147,197,253,0.1);
+  will-change: transform, opacity, width, height, left, top;
+}
+
+/* NAV */
+nav {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 150;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 clamp(1.5rem, 5vw, 4rem);
+  height: 80px;
+}
+.nav-logo { font-family: 'Libre Baskerville', serif; font-size: 1.2rem; color: var(--white); text-decoration: none; }
+.nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+.nav-links a { font-size: 0.78rem; font-weight: 500; text-transform: uppercase; color: var(--white); text-decoration: none; }
+
+/* HERO */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  background: #000;
+}
+.hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0, 51, 160, 0.15) 0%, rgba(0, 0, 0, 0.5) 100%);
+  z-index: 2;
+}
+.hero-video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+.hero-content { position: relative; z-index: 10; }
+.hero-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(3.5rem, 11vw, 9.5rem);
+  color: var(--white); line-height: 0.9;
+  text-transform: uppercase; letter-spacing: -0.02em;
+  opacity: 0; animation: fadeUp 1s 0.2s forwards;
+}
+.hero-title em { font-style: italic; text-transform: none; }
+
+.hero-ctas { margin-top: 3rem; opacity: 0; animation: fadeUp 1s 0.6s forwards; }
+.btn {
+  display: inline-block; padding: 1.1rem 3rem;
+  font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+  text-decoration: none; border-radius: 2px; margin: 0 10px;
+  transition: 0.3s;
+}
+.btn-primary { background: var(--white); color: var(--blue-dark); }
+.btn-ghost { border: 1.5px solid var(--white); color: var(--white); }
+
+/* TICKETS */
+#tickets { background: var(--white); padding: 8rem clamp(1.5rem, 5vw, 5rem); border-bottom: 1px solid var(--border); }
+.ticket-layout { display: grid; grid-template-columns: 320px 1fr; gap: 4rem; align-items: start; margin-top: 3rem; }
+@media (max-width: 860px) { .ticket-layout { grid-template-columns: 1fr; } }
+
+.cal-wrap { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; }
+.cal-month-title { font-size: 0.95rem; font-weight: 600; text-align: center; display: block; margin-bottom: 1.2rem; }
+.cal-grid { width: 100%; border-collapse: collapse; }
+.cal-grid th { font-size: 0.7rem; color: #a0aec0; padding-bottom: 0.8rem; text-transform: uppercase; }
+.cal-day { width: 40px; height: 40px; border-radius: 4px; border: none; background: none; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
+.cal-day.show-day { color: var(--blue); font-weight: 700; background: #f0f4ff; }
+.cal-day.selected { background: var(--blue) !important; color: white !important; }
+
+.slots-date-header { font-family: 'Libre Baskerville', serif; font-size: 1.8rem; margin-bottom: 1.5rem; }
+.slot-card { background: var(--off-white); padding: 1.5rem; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.slot-buy { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: white; background: var(--blue); padding: 0.8rem 1.5rem; text-decoration: none; border-radius: 2px; }
+
+/* CAST SECTION */
+#cast { background: var(--off-white); padding: 8rem clamp(1.5rem, 5vw, 5rem); }
+.cast-header { margin-bottom: 5rem; text-align: center; }
+
+.cast-component-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 3rem 2rem;
+}
+
+.cast-card-new {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.cast-avatar-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  margin-bottom: 1.2rem;
+}
+
+.cast-avatar-frame::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 14px;
+  background-image: radial-gradient(var(--border) 15%, transparent 16%);
+  background-size: 6px 6px;
+  opacity: 0.5;
+  z-index: 0;
+}
+
+.cast-avatar-square {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #eaedf5;
+  border: 1px solid var(--border);
+  position: relative;
+  z-index: 1;
+}
+
+.cast-avatar-image {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: 0.3s;
+}
+
+.cast-details-new { padding-left: 2px; }
+
+.cast-name-new {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+}
+
+.cast-role-new {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--blue);
+  margin-bottom: 0.1rem;
+}
+
+.cast-tag-new {
+  font-size: 0.75rem;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position: absolute;" aria-hidden="true">
+  <defs>
+    <filter id="liquid-trail">
+      <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="2" />
+      <feDisplacementMap in="SourceGraphic" scale="25" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </defs>
+</svg>
+<div id="ripple-container" class="ripple-container"></div>
+
+<nav>
+  <a href="#" class="nav-logo">BloorARTS</a>
+  <ul class="nav-links">
+    <li><a href="#tickets">Tickets</a></li>
+    <li><a href="#cast">Cast</a></li>
+    <li><a href="https://tdsb.schoolcashonline.com/Fee/Details/432845/153/False/True" target="_blank" style="background:white; color:#0033A0; padding: 0.5rem 1rem; border-radius:2px;">Donate</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <video class="hero-video" autoplay muted loop playsinline><source src="hero.mp4" type="video/mp4"></video>
+  <div class="hero-content">
+    <h1 class="hero-title">The Little<br><em>Mermaid</em></h1>
+    <div class="hero-ctas">
+      <a href="#tickets" class="btn btn-primary">Purchase Tickets</a>
+      <a href="#cast" class="btn btn-ghost">The Company</a>
+    </div>
+  </div>
+</header>
+
+<section id="tickets">
+  <span style="font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--blue);">Box Office</span>
+  <h2 style="font-family:'Libre Baskerville'; font-size: 2.5rem; margin-top: 0.5rem;">Performance Dates</h2>
+  
+  <div class="ticket-layout">
+    <div class="cal-wrap">
+      <span class="cal-month-title">April / May 2026</span>
+      <table class="cal-grid">
+        <thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead>
+        <tbody id="cal-body"></tbody>
+      </table>
+    </div>
+    <div id="slots-panel"><div id="slots-content" style="color:var(--text-soft); padding-top:2rem;">Select a highlighted date to view showtimes.</div></div>
+  </div>
+</section>
+
+<section id="cast">
+  <div class="cast-header">
+    <span style="font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--blue);">The Company</span>
+    <h2 style="font-family:'Libre Baskerville'; font-size: 2.5rem; margin-top: 0.5rem;">Cast List</h2>
+  </div>
+  <div class="cast-component-grid" id="cast-grid-new"></div>
+</section>
+
+<script>
+/** 1. DATA **/
+const showData = {
+  "2025-04-30": [{ time: "7:00 PM", cast: "Reef" }],
+  "2025-05-01": [{ time: "7:00 PM", cast: "Lagoon" }],
+  "2025-05-02": [{ time: "2:00 PM", cast: "Reef" }, { time: "7:00 PM", cast: "Lagoon" }]
+};
+
+const castMembers = [
+  { role: "Ariel", reef: "Stella Ramsay", reefImg: "stella-ramsay.jpg", lagoon: "Amelia Greenblatt", lagoonImg: "amelia-greenblatt.jpg" },
+  { role: "Prince Eric", reef: "Leo Izmaylov", reefImg: "leo-izmaylov.jpg", lagoon: "Corey Ship", lagoonImg: "corey-ship.jpg" },
+  { role: "Pilot", reef: "Nate Jeanerette", reefImg: "nate-jeanerette.jpg", lagoon: "Scofield Tsai", lagoonImg: "scofield-tsai.jpg" },
+  { role: "Grimsby", reef: "Neil Basak", reefImg: "neil-basak.jpg", lagoon: "Miles Francis-Kwak", lagoonImg: "miles-francis-kwak.jpg" },
+  { role: "Flounder", reef: "Devika Nath", reefImg: "devika-nath.jpg", lagoon: "Reena Li", lagoonImg: "reena-li.jpg" },
+  { role: "Scuttle", reef: "Izabella Szabados", reefImg: "izabella-szabados.jpg", lagoon: "Hayden Sloan", lagoonImg: "hayden-sloan.jpg" },
+  { role: "King Triton", both: "Jack Siegel", img: "jack-siegel.jpg" },
+  { role: "Windward", both: "Shua Rocklin", img: "shua-rocklin.jpg" },
+  { role: "Sebastian", reef: "Jordan Paul", reefImg: "jordan-paul.jpg", lagoon: "Maria Maameri", lagoonImg: "maria-maameri.jpg" },
+  { role: "Aquata / Princess 5", both: "Sara Elhossaini", img: "sara-elhossaini.jpg" },
+  { role: "Andrina / Princess 4", both: "Prashasti Narayan", img: "prashasti-narayan.jpg" },
+  { role: "Arista / Princess 1", both: "Daisy Mutuku", img: "daisy-mutuku.jpg" },
+  { role: "Atina / Princess 6", both: "Mariana Oliveira", img: "mariana-oliveira.jpg" },
+  { role: "Adella / Princess 3", both: "Shion Hogg", img: "shion-hogg.jpg" },
+  { role: "Allana / Princess 2", both: "Maeve O'Connor", img: "maeve-oconnor.jpg" },
+  { role: "Flotsam", both: "Aishani Mullan-Persad", img: "aishani-mullan-persad.jpg" },
+  { role: "Jetsam", both: "Alyssa Seuraj", img: "alyssa-seuraj.jpg" },
+  { role: "Ursula", reef: "Maisha Huda", reefImg: "maisha-huda.jpg", lagoon: "Maia Iorio", lagoonImg: "maia-iorio.jpg" },
+  { role: "Carlotta", both: "Georgia Flynn", img: "georgia-flynn.jpg" },
+  { role: "Chef Louis", reef: "Ryan Pereira-Costa", reefImg: "ryan-pereira-costa.jpg", lagoon: "Kio Stocker Witterick", lagoonImg: "kio-stocker-witterick.jpg" },
+  { role: "Ensemble", both: "Amelia Oliveira", img: "amelia-oliveira.jpg" },
+  { role: "Ensemble", both: "Gus Cooper", img: "gus-cooper.jpg" },
+  { role: "Ensemble", both: "Bhor Katarina", img: "bhor-katarina.jpg" },
+  { role: "Ensemble", both: "Julia Cholette", img: "julia-cholette.jpg" },
+  { role: "Ensemble", both: "Jasper King", img: "jasper-king.jpg" }
+];
+
+/** 2. CALENDAR **/
+function buildCalendar() {
+  const body = document.getElementById('cal-body');
+  const days = [27, 28, 29, 30, 1, 2, 3]; 
+  let html = '<tr>';
+  days.forEach(d => {
+    const dateStr = d > 20 ? `2025-04-${d}` : `2025-05-0${d}`;
+    html += `<td><button class="cal-day ${showData[dateStr]?'show-day':''}" onclick="selectDate('${dateStr}', this)">${d}</button></td>`;
+  });
+  body.innerHTML = html + '</tr>';
+}
+
+function selectDate(date, el) {
+  document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+  const panel = document.getElementById('slots-content');
+  const shows = showData[date];
+  if (!shows) { panel.innerHTML = "No shows scheduled."; return; }
+  let html = `<h3 class="slots-date-header">${new Date(date+"T12:00:00").toLocaleDateString('en-US',{month:'long',day:'numeric'})}</h3>`;
+  shows.forEach(s => {
+    html += `<div class="slot-card"><div><strong>${s.time}</strong><br><small>Cast ${s.cast}</small></div>
+             <a href="#" class="slot-buy">Tickets</a></div>`;
+  });
+  panel.innerHTML = html;
+}
+
+/** 3. CAST CARDS **/
+function buildCast() {
+  const grid = document.getElementById('cast-grid-new');
+  let html = '';
+  castMembers.forEach(m => {
+    if (m.both) {
+      html += createCard(m.role, m.both, 'Both Casts', m.img);
+    } else {
+      html += createCard(m.role, m.reef, 'Cast Reef', m.reefImg);
+      html += createCard(m.role, m.lagoon, 'Cast Lagoon', m.lagoonImg);
+    }
+  });
+  grid.innerHTML = html;
+}
+
+function createCard(role, name, castType, imgFile) {
+  // Check if image file exists, else use placeholder
+  const avatar = imgFile 
+    ? `<img src="${imgFile}" class="cast-avatar-image" alt="${name}" onerror="this.style.display='none'; this.nextElementSibling.style.opacity='0.1'">`
+    : "";
+  
+  const placeholder = `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:2rem; opacity:0.1; position:absolute; top:0; left:0;">🎭</div>`;
+
+  return `
+    <div class="cast-card-new">
+      <div class="cast-avatar-frame">
+        <div class="cast-avatar-square">
+          ${avatar}
+          ${placeholder}
+        </div>
+      </div>
+      <div class="cast-details-new">
+        <div class="cast-name-new">${name}</div>
+        <div class="cast-role-new">${role}</div>
+        <div class="cast-tag-new">${castType}</div>
+      </div>
+    </div>`;
+}
+
+/** 4. RIPPLE TRAIL **/
+const POOL_SIZE = 80;
+const SPAWN_DISTANCE = 25;
+const ripples = [];
+let index = 0, lastSpawn = { x: -999, y: -999 };
+
+function initRipple() {
+  const container = document.getElementById('ripple-container');
+  for (let i = 0; i < POOL_SIZE; i++) {
+    const el = document.createElement("div"); el.className = "ripple-node";
+    container.appendChild(el);
+    ripples.push({ el, active: false, age: 0, x: 0, y: 0 });
+  }
+  window.addEventListener("mousemove", (e) => {
+    if (Math.hypot(e.clientX - lastSpawn.x, e.clientY - lastSpawn.y) < SPAWN_DISTANCE) return;
+    lastSpawn = { x: e.clientX, y: e.clientY };
+    const r = ripples[index]; index = (index + 1) % POOL_SIZE;
+    r.active = true; r.age = 0; r.x = e.clientX; r.y = e.clientY;
+  });
+  function tick() {
+    for (const r of ripples) {
+      if (!r.active) continue;
+      r.age += 0.006; 
+      if (r.age >= 1) { r.active = false; r.el.style.opacity = "0"; continue; }
+      const size = 20 + r.age * 300;
+      r.el.style.width = r.el.style.height = `${size}px`;
+      r.el.style.left = `${r.x - size/2}px`; r.el.style.top = `${r.y - size/2}px`;
+      r.el.style.opacity = 1 - Math.pow(r.age, 1.2);
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+}
+
+window.onload = () => { buildCalendar(); buildCast(); initRipple(); };
+</script>
+</body>
+</html>
