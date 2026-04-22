@@ -3,261 +3,112 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BloorARTS — The Little Mermaid Musical 2026</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<title>BloorARTS The Little Mermaid Musical 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --blue: #0033A0; --white: #ffffff; --off-white: #f8f9fc; --border: #d0d8e8; --text: #0a1a3a; }
 
-:root {
-  --blue: #0033A0;
-  --blue-dark: #00237a;
-  --white: #ffffff;
-  --off-white: #f8f9fc;
-  --border: #d0d8e8;
-  --text: #0a1a3a;
-  --text-soft: #4a5878;
-  --text-faint: #8e9db0;
-}
+body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--white); overflow-x: hidden; scroll-behavior: smooth; }
 
-html, body { 
-  scroll-behavior: smooth; 
-  overscroll-behavior-y: none; 
-  background: var(--white);
-}
-
-body {
-  font-family: 'Inter', sans-serif;
-  color: var(--text);
-  -webkit-font-smoothing: antialiased;
-}
-
-/* RIPPLE EFFECT */
-.ripple-container {
-  position: fixed;
-  inset: 0;
-  z-index: 99;
-  pointer-events: none;
-}
-.ripple-node {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  opacity: 0;
-  backdrop-filter: url(#liquid-trail) blur(1px);
-  -webkit-backdrop-filter: url(#liquid-trail) blur(1px);
-  box-shadow: inset 0 0 30px rgba(255,255,255,0.05), 0 0 15px rgba(147,197,253,0.1);
-  will-change: transform, opacity, width, height, left, top;
-}
-
-/* NAV */
-nav {
-  position: absolute; top: 0; left: 0; right: 0; z-index: 150;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 clamp(1.5rem, 5vw, 4rem);
-  height: 80px;
-}
-.nav-logo { font-family: 'Libre Baskerville', serif; font-size: 1.2rem; color: var(--white); text-decoration: none; }
+/* NAVIGATION */
+nav { position: absolute; top: 0; width: 100%; z-index: 100; display: flex; justify-content: space-between; padding: 2rem 4rem; align-items: center; }
+.nav-logo { font-family: 'Libre Baskerville'; font-size: 1.2rem; color: white; text-decoration: none; }
 .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
-.nav-links a { font-size: 0.78rem; font-weight: 500; text-transform: uppercase; color: var(--white); text-decoration: none; }
+.nav-links a { color: white; text-decoration: none; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; }
 
-/* HERO */
-.hero {
-  position: relative;
-  min-height: 100svh;
-  display: flex; align-items: center; justify-content: center;
-  text-align: center;
-  overflow: hidden;
-  background: #000;
-}
-.hero::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(0, 51, 160, 0.15) 0%, rgba(0, 0, 0, 0.5) 100%);
-  z-index: 2;
-}
-.hero-video {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  z-index: 1;
-}
-.hero-content { position: relative; z-index: 10; }
-.hero-title {
-  font-family: 'Libre Baskerville', serif;
-  font-size: clamp(3.5rem, 11vw, 9.5rem);
-  color: var(--white); line-height: 0.9;
-  text-transform: uppercase; letter-spacing: -0.02em;
-  opacity: 0; animation: fadeUp 1s 0.2s forwards;
-}
-.hero-title em { font-style: italic; text-transform: none; }
+/* HERO SECTION */
+.hero { position: relative; height: 100vh; width: 100%; background: #000; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+#liquid-canvas { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 
-.hero-ctas { margin-top: 3rem; opacity: 0; animation: fadeUp 1s 0.6s forwards; }
-.btn {
-  display: inline-block; padding: 1.1rem 3rem;
-  font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
-  text-decoration: none; border-radius: 2px; margin: 0 10px;
-  transition: 0.3s;
+.hero-ui { position: absolute; bottom: 12%; z-index: 10; text-align: center; width: 100%; pointer-events: none; }
+.hero-btns { display: flex; justify-content: center; gap: 20px; pointer-events: auto; }
+.btn { 
+    display: inline-block; padding: 1.1rem 2.8rem; font-size: 0.75rem; font-weight: 700; 
+    text-transform: uppercase; text-decoration: none; border-radius: 2px; transition: 0.3s;
 }
-.btn-primary { background: var(--white); color: var(--blue-dark); }
+.btn-primary { background: var(--white); color: var(--blue); }
 .btn-ghost { border: 1.5px solid var(--white); color: var(--white); }
 
-/* TICKETS */
-#tickets { background: var(--white); padding: 8rem clamp(1.5rem, 5vw, 5rem); border-bottom: 1px solid var(--border); }
-.ticket-layout { display: grid; grid-template-columns: 320px 1fr; gap: 4rem; align-items: start; margin-top: 3rem; }
-@media (max-width: 860px) { .ticket-layout { grid-template-columns: 1fr; } }
+/* CONTENT SECTIONS */
+section { position: relative; z-index: 10; padding: 8rem 5vw; background: white; }
+#cast { background: var(--off-white); }
 
-.cal-wrap { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; }
-.cal-month-title { font-size: 0.95rem; font-weight: 600; text-align: center; display: block; margin-bottom: 1.2rem; }
-.cal-grid { width: 100%; border-collapse: collapse; }
-.cal-grid th { font-size: 0.7rem; color: #a0aec0; padding-bottom: 0.8rem; text-transform: uppercase; }
-.cal-day { width: 40px; height: 40px; border-radius: 4px; border: none; background: none; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
+/* TICKETING & CALENDAR */
+.ticket-layout { display: grid; grid-template-columns: 320px 1fr; gap: 4rem; margin-top: 3rem; }
+.cal-wrap { border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; background: white; }
+.cal-grid { width: 100%; border-collapse: collapse; text-align: center; }
+.cal-day { width: 40px; height: 40px; border: none; background: none; cursor: pointer; border-radius: 4px; font-size: 0.85rem; }
 .cal-day.show-day { color: var(--blue); font-weight: 700; background: #f0f4ff; }
 .cal-day.selected { background: var(--blue) !important; color: white !important; }
+.slot-card { background: white; border: 1px solid var(--border); padding: 1.5rem; border-radius: 6px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
 
-.slots-date-header { font-family: 'Libre Baskerville', serif; font-size: 1.8rem; margin-bottom: 1.5rem; }
-.slot-card { background: var(--off-white); padding: 1.5rem; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-.slot-buy { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: white; background: var(--blue); padding: 0.8rem 1.5rem; text-decoration: none; border-radius: 2px; }
-
-/* CAST SECTION */
-#cast { background: var(--off-white); padding: 8rem clamp(1.5rem, 5vw, 5rem); }
-.cast-header { margin-bottom: 5rem; text-align: center; }
-
-.cast-component-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 3rem 2rem;
-}
-
-.cast-card-new {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-}
-
-.cast-avatar-frame {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  margin-bottom: 1.2rem;
-}
-
-.cast-avatar-frame::after {
-  content: '';
-  position: absolute;
-  inset: -8px;
-  border-radius: 14px;
-  background-image: radial-gradient(var(--border) 15%, transparent 16%);
-  background-size: 6px 6px;
-  opacity: 0.5;
-  z-index: 0;
-}
-
-.cast-avatar-square {
-  width: 100%;
-  height: 100%;
-  border-radius: 12px;
-  overflow: hidden;
-  background-color: #eaedf5;
-  border: 1px solid var(--border);
-  position: relative;
-  z-index: 1;
-}
-
-.cast-avatar-image {
-  width: 100%; height: 100%; object-fit: cover;
-  transition: 0.3s;
-}
-
-.cast-details-new { padding-left: 2px; }
-
-.cast-name-new {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 0.2rem;
-}
-
-.cast-role-new {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--blue);
-  margin-bottom: 0.1rem;
-}
-
-.cast-tag-new {
-  font-size: 0.75rem;
-  color: var(--text-faint);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-@keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+/* CAST GRID SYSTEM */
+.cast-component-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 3.5rem 2rem; }
+.cast-card-new { display: flex; flex-direction: column; }
+.cast-avatar-square { width: 100%; aspect-ratio: 1; border-radius: 12px; background: #eaedf5; border: 1px solid var(--border); overflow: hidden; margin-bottom: 1.2rem; position: relative; }
+.cast-avatar-image { width: 100%; height: 100%; object-fit: cover; position: relative; z-index: 2; }
+.cast-name-new { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.2rem; }
+.cast-role-new { font-size: 0.85rem; font-weight: 500; color: var(--blue); }
+.cast-tag-new { font-size: 0.75rem; color: #8e9db0; text-transform: uppercase; letter-spacing: 0.05em; }
 </style>
 </head>
 <body>
 
-<svg width="0" height="0" style="position: absolute;" aria-hidden="true">
-  <defs>
-    <filter id="liquid-trail">
-      <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="2" />
-      <feDisplacementMap in="SourceGraphic" scale="25" xChannelSelector="R" yChannelSelector="G" />
-    </filter>
-  </defs>
-</svg>
-<div id="ripple-container" class="ripple-container"></div>
-
 <nav>
-  <a href="#" class="nav-logo">BloorARTS</a>
-  <ul class="nav-links">
-   <li><a href="https://tdsb.schoolcashonline.com/Fee/Details/432845/153/False/True" target="_blank">Tickets</a></li>
-    <li><a href="#cast">Cast</a></li>
-    <li><a href="https://tdsb.schoolcashonline.com/Fee/Details/432845/153/False/True" target="_blank" style="background:white; color:#0033A0; padding: 0.5rem 1rem; border-radius:2px;">Donate</a></li>
-  </ul>
+    <a href="#" class="nav-logo">BloorARTS</a>
+    <ul class="nav-links">
+        <li><a href="https://tdsb.schoolcashonline.com/Fee/Details/432845/153/False/True" target="_blank">Tickets</a></li>
+        <li><a href="#cast">The Company</a></li>
+        <li><a href="https://tdsb.schoolcashonline.com/Fee/Details/432845/153/False/True" target="_blank" style="background:white; color:var(--blue); padding: 0.6rem 1.2rem; border-radius:2px;">Donate</a></li>
+    </ul>
 </nav>
 
 <header class="hero">
-  <video class="hero-video" autoplay muted loop playsinline><source src="hero.mp4" type="video/mp4"></video>
-  <div class="hero-content">
-    <h1 class="hero-title">The Little<br><em>Mermaid</em></h1>
-    <div class="hero-ctas">
-      <a href="https://tdsb.schoolcashonline.com/Fee/Details/432845/153/False/True" class="btn btn-primary" target="_blank">Purchase Tickets</a>
-      <a href="#cast" class="btn btn-ghost">The Company</a>
+    <div id="liquid-canvas"></div>
+    <div class="hero-ui">
+        <div class="hero-btns">
+            <a href="https://tdsb.schoolcashonline.com/Fee/Details/432845/153/False/True" target="_blank" class="btn btn-primary">Purchase Tickets</a>
+            <a href="#cast" class="btn btn-ghost">The Company</a>
+        </div>
     </div>
-  </div>
 </header>
 
 <section id="tickets">
-  <span style="font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--blue);">Box Office</span>
-  <h2 style="font-family:'Libre Baskerville'; font-size: 2.5rem; margin-top: 0.5rem;">Performance Dates</h2>
-  
-  <div class="ticket-layout">
-    <div class="cal-wrap">
-      <span class="cal-month-title">April / May 2026</span>
-      <table class="cal-grid">
-        <thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead>
-        <tbody id="cal-body"></tbody>
-      </table>
+    <span style="font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--blue);">Box Office</span>
+    <h2 style="font-family:'Libre Baskerville'; font-size: 2.5rem; margin-top: 0.5rem;">Performance Dates</h2>
+    <div class="ticket-layout">
+        <div class="cal-wrap">
+            <table class="cal-grid">
+                <thead><tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr></thead>
+                <tbody id="cal-body"></tbody>
+            </table>
+        </div>
+        <div id="slots-panel"><div id="slots-content" style="color:#4a5878; padding-top:1rem;">Select a highlighted date to view showtimes.</div></div>
     </div>
-    <div id="slots-panel"><div id="slots-content" style="color:var(--text-soft); padding-top:2rem;">Select a highlighted date to view showtimes.</div></div>
-  </div>
 </section>
 
 <section id="cast">
-  <div class="cast-header">
-    <span style="font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--blue);">The Company</span>
-    <h2 style="font-family:'Libre Baskerville'; font-size: 2.5rem; margin-top: 0.5rem;">Cast List</h2>
-  </div>
-  <div class="cast-component-grid" id="cast-grid-new"></div>
+    <div style="text-align: center; margin-bottom: 4rem;">
+        <span style="font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--blue);">The Company</span>
+        <h2 style="font-family:'Libre Baskerville'; font-size: 2.5rem; margin-top: 0.5rem;">Cast List</h2>
+    </div>
+    <div class="cast-component-grid" id="cast-grid"></div>
 </section>
 
-<script>
-/** 1. DATA **/
+<script type="importmap">
+  { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+
+const TICKET_URL = "https://tdsb.schoolcashonline.com/Fee/Details/432845/153/False/True";
+
 const showData = {
-  "2025-04-30": [{ time: "7:00 PM", cast: "Reef" }],
-  "2025-05-01": [{ time: "7:00 PM", cast: "Lagoon" }],
-  "2025-05-02": [{ time: "2:00 PM", cast: "Reef" }, { time: "7:00 PM", cast: "Lagoon" }]
+    "2026-04-30": { label: "April 30th", shows: [{ time: "7:00 PM", cast: "Reef" }] },
+    "2026-05-01": { label: "May 1st", shows: [{ time: "7:00 PM", cast: "Lagoon" }] },
+    "2026-05-02": { label: "May 2nd", shows: [{ time: "2:00 PM", cast: "Reef" }, { time: "7:00 PM", cast: "Lagoon" }] }
 };
 
 const castMembers = [
@@ -288,107 +139,137 @@ const castMembers = [
   { role: "Ensemble", both: "Jasper King", img: "jasper-king.jpg" }
 ];
 
-/** 2. CALENDAR **/
-function buildCalendar() {
-  const body = document.getElementById('cal-body');
-  const days = [27, 28, 29, 30, 1, 2, 3]; 
-  let html = '<tr>';
-  days.forEach(d => {
-    const dateStr = d > 20 ? `2025-04-${d}` : `2025-05-0${d}`;
-    html += `<td><button class="cal-day ${showData[dateStr]?'show-day':''}" onclick="selectDate('${dateStr}', this)">${d}</button></td>`;
-  });
-  body.innerHTML = html + '</tr>';
+// --- TEXT TEXTURE ENGINE (STABLE POSITION) ---
+function createTextTexture() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 4096; canvas.height = 2048; 
+    const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.fillStyle = 'white'; ctx.textAlign = 'center';
+    
+    ctx.font = '700 280px "Libre Baskerville"';
+    ctx.fillText('THE LITTLE', 2048, 880);
+    
+    // Stable Baseline (1260) to avoid sub-pixel chippiness
+    ctx.font = 'italic 700 480px "Libre Baskerville"';
+    ctx.fillText('Mermaid', 2048, 1260);
+    
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.minFilter = THREE.LinearFilter;
+    tex.magFilter = THREE.LinearFilter;
+    tex.anisotropy = 16; 
+    return tex;
 }
 
-function selectDate(date, el) {
-  document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
-  el.classList.add('selected');
-  const panel = document.getElementById('slots-content');
-  const shows = showData[date];
-  if (!shows) { panel.innerHTML = "No shows scheduled."; return; }
-  let html = `<h3 class="slots-date-header">${new Date(date+"T12:00:00").toLocaleDateString('en-US',{month:'long',day:'numeric'})}</h3>`;
-  shows.forEach(s => {
-    html += `<div class="slot-card"><div><strong>${s.time}</strong><br><small>Cast ${s.cast}</small></div>
-             <a href="https://tdsb.schoolcashonline.com/Fee/Details/432845/153/False/True" target="_blank" class="slot-buy">Tickets</a>
-             </div>`;
-  });
-  panel.innerHTML = html;
+// --- WEBGL RENDERING ---
+const container = document.getElementById('liquid-canvas');
+const scene = new THREE.Scene();
+const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(window.devicePixelRatio); 
+renderer.setSize(window.innerWidth, window.innerHeight);
+container.appendChild(renderer.domElement);
+
+const video = document.createElement('video');
+video.src = 'hero.mp4'; video.loop = true; video.muted = true; video.playsInline = true;
+video.play();
+
+const videoTexture = new THREE.VideoTexture(video);
+const textTexture = createTextTexture();
+const mouse = new THREE.Vector2(0, 0);
+
+let targetA = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight);
+let targetB = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight);
+
+const simMaterial = new THREE.ShaderMaterial({
+    uniforms: { tPrev: { value: targetA.texture }, uMouse: { value: mouse }, uRes: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) } },
+    vertexShader: `varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position, 1.0); }`,
+    fragmentShader: `
+        uniform sampler2D tPrev; uniform vec2 uMouse; uniform vec2 uRes; varying vec2 vUv;
+        void main() {
+            float d = distance(gl_FragCoord.xy, uMouse);
+            vec4 prev = texture2D(tPrev, vUv);
+            vec4 neighbor = texture2D(tPrev, vUv + vec2(0.002, 0.0)) + texture2D(tPrev, vUv - vec2(0.002, 0.0)) + 
+                            texture2D(tPrev, vUv + vec2(0.0, 0.002)) + texture2D(tPrev, vUv - vec2(0.0, 0.002));
+            float next = (neighbor.r * 0.5 - prev.g) * 0.98;
+            if(d < 25.0) next += 0.45;
+            gl_FragColor = vec4(next, prev.r, 0.0, 1.0);
+        }`
+});
+
+const finalMaterial = new THREE.ShaderMaterial({
+    uniforms: { tVideo: { value: videoTexture }, tText: { value: textTexture }, tRipples: { value: targetB.texture } },
+    vertexShader: `varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position, 1.0); }`,
+    fragmentShader: `
+        uniform sampler2D tVideo; uniform sampler2D tText; uniform sampler2D tRipples; varying vec2 vUv;
+        void main() {
+            float ripple = texture2D(tRipples, vUv).r;
+            vec2 distortUv = vUv + ripple * 0.03; 
+            vec4 vid = texture2D(tVideo, distortUv);
+            vec4 txt = texture2D(tText, distortUv);
+            gl_FragColor = mix(vid, txt, txt.a);
+        }`
+});
+
+const simPlane = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), simMaterial);
+const finalPlane = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), finalMaterial);
+
+window.addEventListener('mousemove', (e) => {
+    if (e.clientY < window.innerHeight) mouse.set(e.clientX, window.innerHeight - e.clientY);
+});
+
+function animate() {
+    requestAnimationFrame(animate);
+    simMaterial.uniforms.tPrev.value = targetA.texture;
+    renderer.setRenderTarget(targetB);
+    renderer.render(simPlane, camera);
+    renderer.setRenderTarget(null);
+    renderer.render(finalPlane, camera);
+    let temp = targetA; targetA = targetB; targetB = temp;
+}
+animate();
+
+// --- CALENDAR LOGIC (NEW LABELS) ---
+window.selectDate = (dateKey, el) => {
+    document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
+    el.classList.add('selected');
+    const panel = document.getElementById('slots-content');
+    const data = showData[dateKey];
+    let html = `<h3 style="margin-bottom:1.5rem; font-family:'Libre Baskerville'; font-size:1.8rem;">${data.label}</h3>`;
+    data.shows.forEach(s => {
+        html += `<div class="slot-card"><div><strong>${s.time}</strong><br><small>Cast ${s.cast}</small></div><a href="${TICKET_URL}" target="_blank" class="btn" style="background:var(--blue); color:white; padding:10px 20px; text-decoration:none; border-radius:2px; font-size:0.75rem; font-weight:700;">PURCHASE TICKETS</a></div>`;
+    });
+    panel.innerHTML = html;
+};
+
+function init() {
+    const cal = document.getElementById('cal-body');
+    const days = [27, 28, 29, 30, 1, 2, 3];
+    let row = '<tr>';
+    days.forEach(d => {
+        const dateKey = d > 20 ? `2026-04-${d}` : `2026-05-0${d}`;
+        const isShow = showData[dateKey];
+        row += `<td><button class="cal-day ${isShow?'show-day':''}" ${isShow?`onclick="selectDate('${dateKey}', this)"`:''}>${d}</button></td>`;
+    });
+    cal.innerHTML = row + '</tr>';
+
+    const grid = document.getElementById('cast-grid');
+    castMembers.forEach(m => {
+        if (m.both) {
+            grid.innerHTML += createCard(m.role, m.both, 'Both Casts', m.img);
+        } else {
+            grid.innerHTML += createCard(m.role, m.reef, 'Cast Reef', m.reefImg);
+            grid.innerHTML += createCard(m.role, m.lagoon, 'Cast Lagoon', m.lagoonImg);
+        }
+    });
 }
 
-/** 3. CAST CARDS **/
-function buildCast() {
-  const grid = document.getElementById('cast-grid-new');
-  let html = '';
-  castMembers.forEach(m => {
-    if (m.both) {
-      html += createCard(m.role, m.both, 'Both Casts', m.img);
-    } else {
-      html += createCard(m.role, m.reef, 'Cast Reef', m.reefImg);
-      html += createCard(m.role, m.lagoon, 'Cast Lagoon', m.lagoonImg);
-    }
-  });
-  grid.innerHTML = html;
+function createCard(role, name, tag, imgFile) {
+    return `<div class="cast-card-new"><div class="cast-avatar-square">${imgFile?`<img src="${imgFile}" class="cast-avatar-image" alt="${name}" onerror="this.style.opacity='0'">`:""}<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:2rem; opacity:0.1; position:absolute; top:0; left:0; z-index:1;">🎭</div></div><div class="cast-name-new">${name}</div><div class="cast-role-new">${role}</div><div class="cast-tag-new">${tag}</div></div>`;
 }
 
-function createCard(role, name, castType, imgFile) {
-  // Check if image file exists, else use placeholder
-  const avatar = imgFile 
-    ? `<img src="${imgFile}" class="cast-avatar-image" alt="${name}" onerror="this.style.display='none'; this.nextElementSibling.style.opacity='0.1'">`
-    : "";
-  
-  const placeholder = `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:2rem; opacity:0.1; position:absolute; top:0; left:0;">🎭</div>`;
-
-  return `
-    <div class="cast-card-new">
-      <div class="cast-avatar-frame">
-        <div class="cast-avatar-square">
-          ${avatar}
-          ${placeholder}
-        </div>
-      </div>
-      <div class="cast-details-new">
-        <div class="cast-name-new">${name}</div>
-        <div class="cast-role-new">${role}</div>
-        <div class="cast-tag-new">${castType}</div>
-      </div>
-    </div>`;
-}
-
-/** 4. RIPPLE TRAIL **/
-const POOL_SIZE = 80;
-const SPAWN_DISTANCE = 25;
-const ripples = [];
-let index = 0, lastSpawn = { x: -999, y: -999 };
-
-function initRipple() {
-  const container = document.getElementById('ripple-container');
-  for (let i = 0; i < POOL_SIZE; i++) {
-    const el = document.createElement("div"); el.className = "ripple-node";
-    container.appendChild(el);
-    ripples.push({ el, active: false, age: 0, x: 0, y: 0 });
-  }
-  window.addEventListener("mousemove", (e) => {
-    if (Math.hypot(e.clientX - lastSpawn.x, e.clientY - lastSpawn.y) < SPAWN_DISTANCE) return;
-    lastSpawn = { x: e.clientX, y: e.clientY };
-    const r = ripples[index]; index = (index + 1) % POOL_SIZE;
-    r.active = true; r.age = 0; r.x = e.clientX; r.y = e.clientY;
-  });
-  function tick() {
-    for (const r of ripples) {
-      if (!r.active) continue;
-      r.age += 0.006; 
-      if (r.age >= 1) { r.active = false; r.el.style.opacity = "0"; continue; }
-      const size = 20 + r.age * 300;
-      r.el.style.width = r.el.style.height = `${size}px`;
-      r.el.style.left = `${r.x - size/2}px`; r.el.style.top = `${r.y - size/2}px`;
-      r.el.style.opacity = 1 - Math.pow(r.age, 1.2);
-    }
-    requestAnimationFrame(tick);
-  }
-  tick();
-}
-
-window.onload = () => { buildCalendar(); buildCast(); initRipple(); };
+init();
 </script>
 </body>
 </html>
