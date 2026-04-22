@@ -222,7 +222,7 @@ nav {
   <div class="hero-content">
     <h1 class="hero-title">The Little<br><em>Mermaid</em></h1>
     <div class="hero-ctas">
-      <a href="#tickets" class="btn btn-primary">Purchase Tickets</a>
+      <a href="https://tdsb.schoolcashonline.com/Fee/Details/432845/153/False/True" class="btn btn-primary" target="_blank">Purchase Tickets</a>
       <a href="#cast" class="btn btn-ghost">The Company</a>
     </div>
   </div>
@@ -309,7 +309,7 @@ function selectDate(date, el) {
   let html = `<h3 class="slots-date-header">${new Date(date+"T12:00:00").toLocaleDateString('en-US',{month:'long',day:'numeric'})}</h3>`;
   shows.forEach(s => {
     html += `<div class="slot-card"><div><strong>${s.time}</strong><br><small>Cast ${s.cast}</small></div>
-             <a href="#" class="slot-buy">Tickets</a></div>`;
+             <a href="https://tdsb.schoolcashonline.com/Fee/Details/432845/153/False/True" target="_blank" class="slot-buy">Tickets</a>
   });
   panel.innerHTML = html;
 }
